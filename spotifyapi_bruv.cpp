@@ -27,7 +27,6 @@ void getTrackID(string trackName, string artistName) {
 
     cpr::Response r = cpr::Get(cpr::Url{ URI }, cpr::Bearer{ TOKEN });
 
-
     cout << "Status code: " << r.status_code << '\n';
     cout << r.text << endl;
 }
@@ -38,18 +37,9 @@ int main(int argc, char** argv) {
     std::string TOKEN = "BQBAJ2nfeZJ1Aejs5XVJnonNW62hZnl4XQm6o-CvfDpiAbm1qWOsffjbUoGqh--yQDewMJ18zoDPphXjnLIqGCHuMYc47jNxCCSrZ85s1DbJZy2XNr17DVeow-MotpCYLcTJsCOAtEL3UHIRWesinU19cRl6cwV3z0mFH8DF2UZFSoBLlsRUmx0b7dW5Dl_B6FwkoItrbgQqnGLM2ZACL7jPFWBQjNA0oKQFE4JWGIl4i_B1PoBV33I5d9guu3WINyLp_eYGYA";
 
     cpr::Response r = cpr::Get(cpr::Url{ URI }, cpr::Bearer{TOKEN});
-
-     
+    
     std::cout << "Status code: " << r.status_code << '\n';
     */
-
-    /*
-    std::cout << "Header:\n";
-    for (const std::pair<const std::basic_string<char>, std::basic_string<char>>& kv : r.header) {
-        std::cout << '\t' << kv.first << ':' << kv.second << '\n';
-    }
-    */
-    //std::cout << "Text: " << r.text << '\n';
 
     cout << "Testing...." << std::endl;
     string name = "hope";
