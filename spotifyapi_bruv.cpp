@@ -12,7 +12,7 @@ string getartistid(string);
 void callAPI_withID(string);
 void getgenres(string);
 
-//change whitespace with +.
+//replace whitespace with +.
 string parseName(string trackName, string artistName) {
     string _temp;
     for (auto x : trackName) {
