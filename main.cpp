@@ -20,7 +20,7 @@ void callAPI_withID(string id) {
     }
 }
 
-//call spotify api with trackname and artist name (3rd question)
+//call spotify api with artist name (3rd question)
 void callAPI_artistname(string artistName) {
     
     string URI = "https://api.spotify.com/v1/search?q=";
