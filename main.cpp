@@ -4,7 +4,7 @@
 #include <cpr/cpr.h>
 
 //token from spotify.
-const string TOKEN = "BQB-nw9dNNhXh3Yi0wxitlW-BBQPjVEi5rXoVsgsV4S_tSBIY5Tql08D2DfnANTumS9wuKtAfeJSlpRc-uLrosD8Df0Pn1BIOAxx_QkJfV86HCBzt0-HTAfI6ECDDgE9pWNcZByUfBOr8O1723GmWtveMohS3C1SCYDkH7grlrSk6UOcq3WOowWWFVbvajlMCWMfKCJItoPliBlU2nxvVyUxe2MOZObtoebexs0dupnY1Xhtt46UrW4bwmHa5osi0gDGimx7Yg";
+const string TOKEN = "";
 
 //call a new api with returned unique id.
 void callAPI_withID(string id) {
