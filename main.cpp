@@ -157,7 +157,6 @@ void callAPI_trackname_af(string trackname, string artistname) {
     URI += parse(trackname);
     URI += parse(artistname);
     URI += "&type=track&limit=1";
-    cout<< URI;
 
     cpr::Response r = cpr::Get(cpr::Url{ URI }, cpr::Bearer{ TOKEN });
     cout << "\n" << "TRACK INFO:" << endl;
