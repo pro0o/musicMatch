@@ -12,6 +12,7 @@ const string TOKEN = " ";
 //function def
 void callAPI_artistname(string artistName);
 
+//comparing mechanism demo.
 class Profile {
 public:
     //acoustic, energy, instrumentals
@@ -150,7 +151,7 @@ void callAPI_audiofeatures(string track_id){
     }
     }
 
-//call api with inputed track name.
+//call api with inputed track name. [af bhanya audio features.]
 void callAPI_trackname_af(string trackname, string artistname) {
     string URI = "https://api.spotify.com/v1/search?q=";
     URI += parse(trackname);
