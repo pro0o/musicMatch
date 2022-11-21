@@ -6,5 +6,5 @@
 
 using namespace std;
 
-string parseName(string artistName);
+string parse(string);
 void tokenize(std::string const& str, const char delim, std::vector<std::string>& out);
