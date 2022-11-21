@@ -1,11 +1,10 @@
 #include "tokenize_parse.h"
 
-//change whitespace with +.
-string parseName(string artistName) {
+//remove shit.
+string parse(string id) {
     string _temp;
-    _temp += ',';
-    for (auto x : artistName) {
-        if (x == ' ')_temp += '+';
+    for (auto x : id) {
+        if (x == ',' || x == '"' || x == '\n' || x == ':' || x == ' ')_temp += "";
         else _temp += x;
     }
     return _temp;
@@ -23,4 +22,3 @@ void tokenize(std::string const& str, const char delim, std::vector<std::string>
         out.push_back(s);
     }
 }
-
