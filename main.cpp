@@ -58,7 +58,7 @@ void adding_up(string Profile_Name, double Acoustic, double Danceability, double
     }
 }
 
-void read_data() {
+/*void read_data() {
     //instead of * a column head name can be specified like name, roll, email.
     //string query_3 = "SELECT * FROM user";
     string query_3 = "SELECT rowid, * FROM music_match";
@@ -166,7 +166,7 @@ int comparing_genre(string genre1, string genre2) {
     }
 
 }
-
+*/
 //call a new api with returned unique id.
 string callAPI_GENRE(string artist_id) {
 
