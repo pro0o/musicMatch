@@ -1,18 +1,102 @@
-
 #include "tokenize_parse.h"
 #include "get_artistid.h"
 #include "genres.h"
 #include "get_trackid.h"
 #include "get_audiofeatures.h"
 #include <cpr/cpr.h>
+#include "sqlite/sqlite3.h"
+using namespace std;
+
+sqlite3* db;
+sqlite3_stmt* stmt;
+string Profile_Name = "chodu bhai";
 
 //token from spotify.
-const string TOKEN = " ";
+const string TOKEN = "BQCsJHpVpZgGrGntL6V2hBgNDgmX-5McXaTMdL3ovsUb90i6abKJyuFjx52bRJhMeXNrcsL1FT7u3RS7XImCdk6REs6U58N4DroU5aLOIcCQCM1NYUl2y3mgb2N61kP0EyBE9ydZhy__3QxReeBxr-wc0GncGrzKoLHlv0m7L4fzrQ-bF2CIfozj0Oyfn1RmfebEnLPyvE5D_x_j49JUz9n2u4tEfIImAStn8GgTKaOfukrR4MqQVqFkKkZR0rn5B99mzUHPrA";
 
-//function def
-void callAPI_artistname(string artistName);
+//function def.
+string callAPI_artist_name(string artistName);
 
-//comparing mechanism demo.
+void connection() {
+    if (sqlite3_open("demo.db", &db) == SQLITE_OK) {
+
+        string query_1 = "CREATE TABLE IF NOT EXISTS music_match(Profile_Name VARCHAR(10), Acoustic DOUBLE, Danceability DOUBLE, Energy DOUBLE, Key INT, Speechiness DOUBLE, Mode INT, Tempo DOUBLE, Valence DOUBLE, Liveness DOUBLE, Genres VARCHAR(100));";
+        int response = sqlite3_prepare_v2(db, query_1.c_str(), -1, &stmt, NULL);
+        //declare the statement.
+        sqlite3_step(stmt);
+        //delete the statement.
+        sqlite3_finalize(stmt);
+        if (response != SQLITE_OK) cout << "ERROR: " << sqlite3_errmsg(db) << endl;
+        else cout << "TABLE WAS CREATED SUCCESSFULLY." << endl;
+
+    }
+}
+
+//adding audio features and genres into a row(PROFILE).
+void adding_up(string Profile_Name, double Acoustic, double Danceability, double Energy, int Key, double Speechiness, int Mode, double Tempo, double Valence, double Liveness, string genres) {
+    if (sqlite3_open("demo.db", &db) == SQLITE_OK) {
+        string query_2 = "INSERT INTO music_match(Profile_Name, Acoustic, Danceability, Energy, Key, Speechiness, Mode, Tempo, Valence, Liveness, Genres) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        int response = sqlite3_prepare_v2(db, query_2.c_str(), -1, &stmt, NULL);
+        sqlite3_bind_text(stmt, 1, Profile_Name.c_str(), Profile_Name.length(), SQLITE_TRANSIENT);
+        sqlite3_bind_double(stmt, 2, Acoustic);
+        sqlite3_bind_double(stmt, 3, Danceability);
+        sqlite3_bind_double(stmt, 4, Energy);
+        sqlite3_bind_int(stmt, 5, Key);
+        sqlite3_bind_double(stmt, 6, Speechiness);
+        sqlite3_bind_int(stmt, 7, Mode);
+        sqlite3_bind_double(stmt, 8, Tempo);
+        sqlite3_bind_double(stmt, 9, Valence); 
+        sqlite3_bind_double(stmt, 10, Liveness);
+        sqlite3_bind_text(stmt, 11, genres.c_str(), genres.length(), SQLITE_TRANSIENT);
+
+        //declare the statement.
+        sqlite3_step(stmt);
+        //delete the statement.
+        sqlite3_finalize(stmt);
+        if (response != SQLITE_OK) cout << "ERROR: " << sqlite3_errmsg(db) << endl;
+        else cout << "AUDIO FEATURES WERE ADDED SUCCESSFULLY." << endl;
+    }
+}
+
+void read_data() {
+    //instead of * a column head name can be specified like name, roll, email.
+    //string query_3 = "SELECT * FROM user";
+    string query_3 = "SELECT rowid, * FROM music_match";
+    int response = sqlite3_prepare_v2(db, query_3.c_str(), -1, &stmt, NULL);
+    if (response != SQLITE_OK) cout << "ERROR: " << sqlite3_errmsg(db) << endl;
+    //while looop until the the last row of name column.
+    else while (response = sqlite3_step(stmt) == SQLITE_ROW) {
+        cout << sqlite3_column_text(stmt, 0) << "\t" << sqlite3_column_text(stmt, 1) << "  " << sqlite3_column_text(stmt, 2)
+            << "  " << sqlite3_column_text(stmt, 3) << endl;
+    }
+}
+
+void delete_shit() {
+    int roll = 47;
+    string query_3 = "DELETE FROM user WHERE roll = ?";
+    int response = sqlite3_prepare_v2(db, query_3.c_str(), -1, &stmt, NULL);
+    sqlite3_bind_int(stmt, 1, roll);
+    sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+
+    if (response != SQLITE_OK) cout << "ERROR:" << sqlite3_errmsg(db) << endl;
+    else cout << "DATAS WERE DELETED SUCCESSFULLY FROM ROLL NO: " << roll << endl;
+}
+
+
+void update_shit() {
+    int roll = 47;
+    string name = "lavde";
+    string query_3 = "UPDATE user SET name = ? WHERE roll = ?";
+    int response = sqlite3_prepare_v2(db, query_3.c_str(), -1, &stmt, NULL);
+    sqlite3_bind_text(stmt, 1, name.c_str(), name.length(), SQLITE_TRANSIENT);
+    sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+
+    if (response != SQLITE_OK) cout << "ERROR:" << sqlite3_errmsg(db) << endl;
+    else cout << "DATAS WERE UPDATED SUCCESSFULLY FROM ROLL NO: " << roll << endl;
+}
+
 class Profile {
 public:
     //acoustic, energy, instrumentals
@@ -84,7 +168,7 @@ int comparing_genre(string genre1, string genre2) {
 }
 
 //call a new api with returned unique id.
-void callAPI_GENRE(string artist_id) {
+string callAPI_GENRE(string artist_id) {
 
     string URI = "https://api.spotify.com/v1/artists/"; 
     URI = URI + artist_id;
@@ -105,15 +189,12 @@ void callAPI_GENRE(string artist_id) {
         cout << "Too Many Requests - Rate limiting has been applied by the SPOTIFY SERVER." << endl;
         break;
     }
-
-    auto genres = getgenres(r.text);
-    for (auto x : genres) {
-        cout << x << endl; 
-    }
+    string genres = getgenres(r.text);
+    return genres;
 }
 
 //call api for audio features.(1st question)
-void callAPI_audiofeatures(string track_id){
+void callAPI_audiofeatures(string track_id, string artistname){
     string URI = "https://api.spotify.com/v1/audio-features/";
     URI += track_id;
     cpr::Response r = cpr::Get(cpr::Url{ URI }, cpr::Bearer{ TOKEN });
@@ -134,24 +215,38 @@ void callAPI_audiofeatures(string track_id){
         break;
     }
     
-    //Now getting a feature.
-    string feature[10] = { "danceability", 
-        "energy", 
-        "loudness", 
-        "mode", 
-        "speechiness",
-        "acousticness",
-        "instrumentalness",
-        "liveness",
-        "valence",
-        "tempo" };
-    for (int i = 0; i < 10; i++) {
-        string parameter = get_audiofeatures(r.text, feature[i]);
-        cout << "the " << feature[i] << " of the track is: " << parse(parameter) << endl;
+    //Now getting features.
+    string feature[9] = {"acousticness", "danceability", "energy", "key", "speechiness", "mode", "tempo", "valence", "liveness"};
+    double feature_af[9]= {};
+    int mode = 0;
+    int key = 0;
+    for (int i = 0; i < 9; i++) {
+        if(i == 3) {
+            string parameter = get_audiofeatures(r.text, feature[i]);
+            //convert string into int.
+            key = stoi(parse(parameter));            
+            cout << "the key of the song is:" << key << endl;
+        }
+        else if(i == 5) {
+            string parameter = get_audiofeatures(r.text, feature[i]);
+            //convert string into int.
+            mode = stoi(parse(parameter));
+            cout << "the mode of the song is:" << mode << endl;
+        }
+        else {
+            string parameter = get_audiofeatures(r.text, feature[i]);
+            //convert string into double.
+            feature_af[i] = stod(parse(parameter));
+            cout << "the "<<feature[i] <<" of the song is : " << feature_af[i] << endl;
+        }
     }
-    }
+    string artist_id = callAPI_artist_name(artistname);
+    string genres = callAPI_GENRE(artist_id);
+    connection();
+    adding_up(Profile_Name, feature_af[0], feature_af[1], feature_af[2], key, feature_af[4], mode, feature_af[6], feature_af[7], feature_af[8], genres);
+}
 
-//call api with inputed track name. [af bhanya audio features.]
+//call api with inputed track name.
 void callAPI_trackname_af(string trackname, string artistname) {
     string URI = "https://api.spotify.com/v1/search?q=";
     URI += parse(trackname);
@@ -181,14 +276,11 @@ void callAPI_trackname_af(string trackname, string artistname) {
     }
     string track_id = parse(get_trackid(r.text));
     cout << "the track id is: "<< track_id;
-
-    callAPI_audiofeatures(track_id);
-    cout << "\n";
-    callAPI_artistname(artistname);
+    callAPI_audiofeatures(track_id, artistname);
 }
 
 //call spotify api with trackname and artist name (3rd question)
-void callAPI_artistname(string artistName) {
+string callAPI_artist_name(string artistName) {
 
     string URI = "https://api.spotify.com/v1/search?q=";
     URI = URI + parse(artistName);
@@ -214,23 +306,68 @@ void callAPI_artistname(string artistName) {
     }
     string artist_id = getartistid(r.text);
     cout << "THE ARTIST ID IS: " << artist_id<<endl;
-    callAPI_GENRE(artist_id);
+    return artist_id;
+}
+
+void comparison_demo() {
+    int rowid = 1;
+    string query_3 = "SELECT rowid, * FROM music_match";
+    int response = sqlite3_prepare_v2(db, query_3.c_str(), -1, &stmt, NULL);
+    if (response != SQLITE_OK) cout << "ERROR: " << sqlite3_errmsg(db) << endl;
+    //while looop until the the last row of name column.
+    else while (response = sqlite3_step(stmt) == SQLITE_ROW) {
+        const unsigned char* genres = sqlite3_column_text(stmt, 11);
+        string _genres = reinterpret_cast<const char*>(genres);
+        cout << _genres;
+        break;
+    }
+
+    /*string genre_1 = "hip hop\nlgbtq+ hip hop\nneo soul\npop";
+    cout<<"genre of profile 1:\n" << genre_1 <<endl;
+    string genre_2 = "conscious hip hop\nhip hop\nrap\nwest coast rap";
+    cout<<"\n" << "genre of profile 2:\n" << genre_2  << endl;
+    
+    cout << "\n" << "COMPARING SHIT..." << endl;
+    string a;
+    //creating an array of first profile genres.
+    int count_1 = 0;
+    string genre_array_1[10] = {};
+    for (int i = 0; i < genre_1.size() + 1; i++) {
+        if (genre_1[i] == '\n' || genre_1[i] == genre_1[genre_1.size()]) {
+            count_1++;
+            genre_array_1[count_1 - 1] = a;
+            a.erase(0, a.size());
+        }
+        else a += genre_1[i];
+    }
+    //creating an array of second profile genres.
+    //new line counts. 
+    int count_2 = 0;
+    string genre_array_2[10] = {};
+    for (int i=0; i < genre_2.size()+1; i++) {
+        if (genre_2[i] == '\n' || genre_2[i]==genre_2[genre_2.size()]) {
+            count_2++;
+            genre_array_2[count_2 - 1] = a;
+            a.erase(0, a.size());
+        }
+        else a+= genre_2[i];
+    }*/
 }
 
 
 int main(int argc, char** argv) {
     cout << "Testing..." << endl;
-    string trackName;
-    string artistName;
+    string trackName="birthday";
+    string artistName="gia margaret";
     
     cout << "\n" << "\"FIRST QUESTION\"" << endl;
-    cout << "NAME A SONG YOU'VE OVERPLAYED LIKE 1000 TIMES:" << endl;
-    cout << "the song name:" << endl;
-    getline(cin, trackName);
-    cout << "the song's artist name:" << endl;
-    getline(cin, artistName);
-    callAPI_trackname_af(trackName, artistName);
-    
+    //cout << "NAME A SONG YOU'VE OVERPLAYED LIKE 1000 TIMES:" << endl;
+    //cout << "the song name:" << endl;
+    //getline(cin, trackName);
+    //cout << "the song's artist name:" << endl;
+    //getline(cin, artistName);
+    //callAPI_trackname_af(trackName, artistName);
+    /*
     cout << "\n" << "\"SECOND QUESTION\"" << endl;
     cout << "NAME A SONG THAT DEFINES YOU AS A PERSON:" << endl;
     cout << "the song name:" << endl;
@@ -238,12 +375,12 @@ int main(int argc, char** argv) {
     cout << "the song's artist name:" << endl;
     getline(cin, artistName);
     callAPI_artistname(artistName);
-    
-    cout << "\n" << "\"THIRD QUESTION\"" << endl;
-    cout << "NAME YOUR FAVOURITE ARTIST:" << endl;
-    cout << "the artist name:" << endl;
-    getline(cin, artistName);
-    callAPI_artistname(artistName);
+    */
+    //cout << "\n" << "\"THIRD QUESTION\"" << endl;
+    //cout << "NAME YOUR FAVOURITE ARTIST:" << endl;
+    //cout << "the artist name:" << endl;
+    //getline(cin, artistName);
+    //callAPI_artistname(artistName);
 
     //Genre_Matchup();
     
@@ -261,6 +398,15 @@ int main(int argc, char** argv) {
     float total_match_per = feature_per + dancebility_per + loudness_per + mode_per + tempo_per + valence_per + valence_per + popularity_per + genre_per;
     cout<< "The match percentage between Profile 1 and Profile 2 is "<<total_match_per<<"%." << endl;
     */ 
+    //comparison_demo();
+    
+
+    //first creating a base for user table.
+    connection();
+    comparison_demo();
+    //delete_shit();
+    //update_shit();
+    sqlite3_close(db);
 
     return 0;
 }
