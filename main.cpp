@@ -116,21 +116,6 @@ void update_shit() {
     else cout << "DATAS WERE UPDATED SUCCESSFULLY FROM ROLL NO: " << roll << endl;
 }
 
-/*class Profile {
-public:
-    //acoustic, energy, instrumentals
-    float feature_1;
-    float dancebility;
-    float loudness;
-    int mode;
-    float tempo;
-    float valence;
-    float popularity;
-    string genre;
-    Profile(float a, float b, float c, int d, float e, float f, float g, string h) :
-        feature_1(a), dancebility(b), loudness(c), mode(d), tempo(e), valence(f), popularity(), genre(h) {}
-};*/
-
 void _acoustic_comparison() {
     //selecting acoustic column from table.
     string query_3 = "SELECT Acoustic FROM music_match";
@@ -214,7 +199,7 @@ void _dancebility_comparison() {
 }
 
 void _energy_comparison() {
-    //selecting acoustic column from table.
+    //selecting energy column from table.
     string query_3 = "SELECT Energy FROM music_match";
     int response = sqlite3_prepare_v2(db, query_3.c_str(), -1, &stmt, NULL);
     //check the response.
@@ -820,7 +805,7 @@ int main(int argc, char** argv) {
     }
 
     string name;
-    cout << "BROSKI, THESE ARE THE PROFILES YOUR MUSIC TASTE MATCHED THE MOST...\n" << endl;
+    cout << "BROSKIIII, THESE ARE THE PROFILES YOUR MUSIC TASTE MATCHED THE MOST...\n" << endl;
     for (int i = 0; i < 3; i++) {
         cout << "Profile: " << name << " with match percent" << TOTAL_MATCHUP[i]<<endl;
     }
