@@ -28,7 +28,7 @@ double valence_match[last_row_id] = {};
 double liveness_match[last_row_id] = {};
 
 //token from spotify.
-const string TOKEN = "BQB7wThMiH_YRLsPGceKF17fAVvofghjYGIfV5RAodFKCW0QdKHtzucj1_LuwtBY_XekFDnYV7kJolbZY6zwnZu9hOMSzF2ypvZWnsJdKnBunwRaDQJ7Ko1TPHqbFFdkm9hvKoImtHTzDxQ30JY9qwthQpCejewwoHLKZ30EczmLCptN-UWHaQVgrAhloMOlFIly7WUbNPjWVAq1fHBfISQKEmU-IX353BSUa2EM7PrSEW7XUnhxutZtwJ6JB8AX9hy2rruyYA";
+const string TOKEN = "";
 
 //function def.
 string callAPI_artist_name(string artistName);
