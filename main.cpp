@@ -940,14 +940,13 @@ username_check:
     cout << "the artist name:" << endl;
     getline(cin, artistName);
     callAPI_artist_name(artistName);
-    
-    row_id++;
-    adding_up(row_id , username, feature_af[0], feature_af[1], feature_af[2], int(feature_af[3]), feature_af[4], int(feature_af[5]), feature_af[6], feature_af[7], feature_af[8], _Genres);
-    
-    /*
-    if (check == 1) update_shit(username, feature_af[0], feature_af[1], feature_af[2], int(feature_af[3]), feature_af[4], int(feature_af[5]), feature_af[6], feature_af[7], feature_af[8], _Genres);
-    else adding_up(username, feature_af[0], feature_af[1], feature_af[2], int(feature_af[3]), feature_af[4], int(feature_af[5]), feature_af[6], feature_af[7], feature_af[8], _Genres);
     */
+    adding_up(row_id , username, feature_af[0], feature_af[1], feature_af[2], int(feature_af[3]), feature_af[4], int(feature_af[5]), feature_af[6], feature_af[7], feature_af[8], _Genres);
+    row_id = sqlite3_last_insert_rowid(db);
+
+    //if (check == 1) update_shit(username, feature_af[0], feature_af[1], feature_af[2], int(feature_af[3]), feature_af[4], int(feature_af[5]), feature_af[6], feature_af[7], feature_af[8], _Genres);
+    //else adding_up(username, feature_af[0], feature_af[1], feature_af[2], int(feature_af[3]), feature_af[4], int(feature_af[5]), feature_af[6], feature_af[7], feature_af[8], _Genres);
+    
     //comparing every stored datas from database.
     cout << "\nCOMPARING RETRIEVED DATAS FROM YOU TO ALL OTHER AVAILABLE PROFILES..." << endl;
     _genre_comparison();
@@ -961,7 +960,7 @@ username_check:
     _valence_comparison();
     _liveness_comparison();
     //delete_shit();
-    
+   
     //adding all compared stats from each profile available.
     vector<double> TOTAL_MATCHUP(row_id);
     for (int i = 0; i < row_id-1; i++) {
