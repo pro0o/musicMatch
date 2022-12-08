@@ -35,7 +35,7 @@ vector<double>liveness_match;
 void callAPI_artist_name(string artistName);
 
 //token from spotify.
-const string TOKEN = "BQD-1KRph1oAflwBYPGBDH3OLA7E2RkOe8czJV50jAaiB5dN6Dok_zi5Ulel6E0CNC-S4htV5Gs68fIVEdMqbmZzywjRHHEeHjWxIkJGPWobxKHmTishiLiucOIeE1lW0Mej4hxjj7lQrjDPzouGhV6IsF3Xv6NaJFGiiXjU6VA1FJhzg4l4dXxgHzg";
+const string TOKEN = "";
 
 //global variables.
 double feature_af[9] = {};
