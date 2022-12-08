@@ -1,5 +1,5 @@
 # Musicmatch
-music_match is a social app that connects people with similar geek/taste in music.                                                                                     this app views you the profiles with whom your music taste matches the most.
+music_match is a social app that connects people with similar geek/taste in music whilelist showing you the profiles with whom your music taste matches the most.
 
 libraries used:
 cpr library, hosts a GET REQUEST TO SPOTIFY API:
