@@ -2,10 +2,12 @@
 music_match is a social app that connects people with similar geek/taste in music whilelist showing you the profiles with whom your music taste matches the most.
 
 for unique TOKEN:
+
 postman API, manual insertion of unique access token recieved by spotify:
 https://www.postman.com/
 
 libraries used:
+
 cpr library, hosts a GET REQUEST TO SPOTIFY API:
 https://github.com/libcpr/cpr
 
