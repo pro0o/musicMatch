@@ -8,4 +8,6 @@ https://github.com/libcpr/cpr
 sqlite3, a serverless dbms to store users specific datas:
 https://www.sqlite.org/index.html
 
+postman API, manual insertion of unique access token recieved by spotify.
+
 this app was built and run in Visual Studio with manual integration of above mentioned libraries. 
