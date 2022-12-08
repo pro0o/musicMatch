@@ -11,6 +11,7 @@ https://github.com/libcpr/cpr
 
 sqlite3, a serverless dbms to store datas:
 https://www.sqlite.org/index.html
+
 or
 these libraries can be easiy installed through vcpkg, a proper library manager:
 https://github.com/microsoft/vcpkg
