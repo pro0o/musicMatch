@@ -15,7 +15,7 @@ sqlite3, a serverless dbms to store datas:
 https://www.sqlite.org/index.html
 
 or
-these libraries can be easiy installed through vcpkg, a proper library manager:
+these libraries can be easily installed through vcpkg, a proper library manager:
 https://github.com/microsoft/vcpkg
 
 this app was built and run in Visual Studio with required c++ extensions and manual integration of above mentioned libraries. 
